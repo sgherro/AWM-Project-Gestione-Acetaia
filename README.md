@@ -4,18 +4,18 @@ Quick setup:
 https://github.com/sgherro/Progetto-AWM---Gestione-Acetaia.git
 
 ### Create a new repository on the command line
-echo "# Progetto-AWM---Gestione-Acetaia" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/sgherro/Progetto-AWM---Gestione-Acetaia.git
-git push -u origin main
+#### echo "# Progetto-AWM---Gestione-Acetaia" >> README.md
+> git init
+> git add README.md
+> git commit -m "first commit"
+> git branch -M main
+> git remote add origin https://github.com/sgherro/Progetto-AWM---Gestione-Acetaia.git
+> git push -u origin main
                 
 ### or push an existing repository from the command line
-git remote add origin https://github.com/sgherro/Progetto-AWM---Gestione-Acetaia.git
-git branch -M main
-git push -u origin main
+> git remote add origin https://github.com/sgherro/Progetto-AWM---Gestione-Acetaia.git
+> git branch -M main
+> git push -u origin main
 
 
 ### or import code from another repository
