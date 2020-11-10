@@ -20,3 +20,6 @@ https://github.com/sgherro/Progetto-AWM---Gestione-Acetaia.git
 
 ### or import code from another repository
 You can initialize this repository with code from a Subversion, Mercurial, or TFS project.
+
+## Tutorial for Git:
+https://gist.github.com/tesseslol/da62aabec74c4fed889ea39c95efc6cc
