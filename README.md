@@ -1,4 +1,4 @@
-# Progetto-AWM---Gestione-Acetaia
+# Progetto-AWM-Gestione-Acetaia
 
 Quick setup:
 https://github.com/sgherro/Progetto-AWM---Gestione-Acetaia.git
