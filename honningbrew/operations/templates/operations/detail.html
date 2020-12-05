@@ -1,0 +1,33 @@
+<p>Informazioni batteria {{name_set}}</p>
+
+{% if list_sets %}
+<ul>
+    <p>Lista barili</p>
+
+    {% for barrel in list_sets %}
+<li>
+     Barile {{barrel.id}}:
+     {{ barrel.type_wood}},
+     {{ barrel.capacity}},
+     {{ barrel.battery.name}}
+</li>
+{% endfor %}
+</ul>
+{%else%}
+<p> Non ci sono barili</p>
+{%endif%}
+
+<p>Operazioni effettuate:</p>
+{% if list_operations %}
+<ul>
+{% for op in list_operations %}
+
+<li>
+    ID: {{op.id}} - {{ op.get_type_operation }} al barile {{op.barrel.id}} ({{ op.datetime }}) 
+
+</li>
+{% endfor %}
+</ul>
+{% else %}
+<p>Non ci sono operazioni </p>
+{% endif %}

@@ -1,0 +1,11 @@
+{% if list_sets %}
+<ul>
+    <p>Lista batterie</p>
+
+    {% for list_barrel in list_sets %}
+<li>
+     Batteria {{list_barrel.name}}</a>
+</li>
+{% endfor %}
+</ul>
+{%endif%}
