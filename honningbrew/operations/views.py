@@ -35,17 +35,17 @@ class SetList(APIView):
 class SetDetails(APIView):
 
     # visualizzazione di lista di barili dentro la stessa batteria    
-    def get(self, request, name, format=None):
-        queryset = Barrel.objects.filter(battery__name=name)
+    def get(self, request, set_name, format=None):
+        queryset = Barrel.objects.filter(battery__name = set_name)
         ser = serializers.BarrelSerializer(queryset, many=True)
         return Response(ser.data)
 
     # aggiunta di un nuovo barrel
-    def post(self, request, name, format=None):
+    def post(self, request, set_name, format=None):
         ser = serializers.BarrelSerializer(data=request.data)
         if ser.is_valid():
             
-            count = Barrel.objects.filter(battery__name=name).count()
+            count = Barrel.objects.filter(battery__name = set_name).count()
 
             ser_instance = ser.save()
             ser_instance.pos = count +1
