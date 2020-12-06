@@ -7,14 +7,14 @@ from . import serializers
 from rest_framework.response import *
 from rest_framework.views import APIView
 
-OPERATIONS_SERIALIZERS_SWICTH = {
+OPERATIONS_SERIALIZERS_SWITCH = {
     "Aggiunta mosto" : serializers.AddMostoSerializer,
     "Misurazione" : serializers.MisurationSerializer,
     "Degustazione" : serializers.TasteSerializer,
     "Rabbocco" : serializers.RabboccoSerializer,
     "Prelievo" : serializers.OperationSerializer
 }
-OPERATIONS_MODELS_SWICTH = {
+OPERATIONS_MODELS_SWITCH = {
     "Aggiunta mosto" : AddMosto,
     "Misurazione" : Misuration,
     "Degustazione" : Taste,
@@ -105,12 +105,13 @@ class OpsList(APIView):
    
     def post(self, request, set_name, format=None):
         type_ops = request.data['name']
-        ser = OPERATIONS_SERIALIZERS_SWICTH[type_ops](data=request.data)
+        ser = OPERATIONS_SERIALIZERS_SWITCH[type_ops](data=request.data)
         if ser.is_valid():  
             ser.save()
             return Response(ser.data, status = status.HTTP_201_CREATED)
         return Response(ser.errors, status = status.HTTP_400_BAD_REQUEST) 
    
+
     """
     def post(self, request, set_name, format=None):
         ser = serializers.OperationSerializer(data=request.data)
@@ -120,16 +121,49 @@ class OpsList(APIView):
         return Response(ser.errors, status = status.HTTP_400_BAD_REQUEST)
 """
 class OpsDetails(APIView):
+
+    # mostra dettagli operazione dato nome della batteria e id dell'operazione, volendo basta anche solo l'id
     def get(self, request, set_name, ops_id, format = None):
         
         try:
-            
             queryset = Operation.objects.filter(barrel__battery__name=set_name, id = ops_id)
             type_ops = queryset[0].name
-            queryset_istance = OPERATIONS_MODELS_SWICTH[type_ops].objects.filter(pk=ops_id)
-            ser = OPERATIONS_SERIALIZERS_SWICTH[type_ops](queryset_istance, many=True)
+            queryset_istance = OPERATIONS_MODELS_SWITCH[type_ops].objects.filter(pk=ops_id)
+            ser = OPERATIONS_SERIALIZERS_SWITCH[type_ops](queryset_istance, many=True)
             return Response(ser.data)
         except:
             return Response(None)
 
+    # modifica dell'operazione dato il nome (facoltativo) e id
+    # si deve passare un dict con il campo da cambiare e il relativo cambio effettuato
+    # non si possono modificare i valori "id" e "barrel" che rimangono fissi
+    # Es:
+    # Contenuto request POST: {"type_measure": "Livello etanolo"} -> {"type_measure": "Livello acido"}
+    def post(self, request, set_name, ops_id, format=None):
+        try:
+            queryset = Operation.objects.filter(barrel__battery__name=set_name, id = ops_id)
+            type_ops = queryset[0].name
+            queryset_instance = OPERATIONS_MODELS_SWITCH[type_ops].objects.filter(pk=ops_id)
+            if 'quantity' in request.data:
+                queryset_instance.update(quantity=request.data['quantity'])
+            if 'type_measure' in request.data:
+                queryset_instance.update(type_measure=request.data['type_measure'])
+            if 'datetime' in request.data:
+                queryset_instance.update(datetime=request.data['datetime'])
+            if 'type_mosto' in request.data:
+                queryset_instance.update(type_mosto=request.data['type_mosto'])
+            if 'barrel_destination' in request.data:
+                queryset_instance.update(barrel_destination=request.data['barrel_destination'])
+            if 'description' in request.data:
+                queryset_instance.update(description=request.data['description'])
+
+            ser = OPERATIONS_SERIALIZERS_SWITCH[type_ops](queryset_instance, many=True)
+            return Response(ser.data)
+        except:
+            return Response(None)
+
+    # elimina l'operazione conoscendo l'id dell'operazione e nome (facoltativo)
+    def delete(self, request, set_name, ops_id, format=None):
+        ret = Operation.objects.get(pk=ops_id).delete()
+        return Response(ret, status=status.HTTP_204_NO_CONTENT)
 #TODO: implementare le altre views 
