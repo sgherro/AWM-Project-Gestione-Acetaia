@@ -23,5 +23,10 @@ https://github.com/sgherro/Progetto-AWM---Gestione-Acetaia.git
 ### ..or import code from another repository
 You can initialize this repository with code from a Subversion, Mercurial, or TFS project.
 
+The comments and the variables name are in Italian.
+
+./honningbrew contains the API Back-End
+./honningbrew_wwebsite contains the Front-End website (typo in the name :-))
+
 ## Tutorial for using Git:
 https://gist.github.com/tesseslol/da62aabec74c4fed889ea39c95efc6cc
