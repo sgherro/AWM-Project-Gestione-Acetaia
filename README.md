@@ -23,7 +23,9 @@ https://github.com/sgherro/Progetto-AWM---Gestione-Acetaia.git
 ### ..or import code from another repository
 You can initialize this repository with code from a Subversion, Mercurial, or TFS project.
 
-The comments and the variables name are in ###Italian.
+#Information
+
+###The comments and the variables name are in Italian.
 
 <pre>
 ./honningbrew contains the API Back-End
