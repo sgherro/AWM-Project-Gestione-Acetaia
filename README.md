@@ -8,7 +8,7 @@ https://github.com/sgherro/Progetto-AWM---Gestione-Acetaia.git
 
 ### The comments and the variables name are in Italian. 
 This is a University project for the course of web application and mobile. \
-It's composed by a Back-end and Front-end web application, build with Django framework (for the API back-end) 
+It's a web application with Back-end and Front-end parts, build with Django framework (for the API back-end) 
 and React (for front-end).
 
 <pre>
