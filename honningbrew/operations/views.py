@@ -112,14 +112,6 @@ class OpsList(APIView):
         return Response(ser.errors, status = status.HTTP_400_BAD_REQUEST) 
    
 
-    """
-    def post(self, request, set_name, format=None):
-        ser = serializers.OperationSerializer(data=request.data)
-        if ser.is_valid():  
-            ser.save()
-            return Response(ser.data, status = status.HTTP_201_CREATED)
-        return Response(ser.errors, status = status.HTTP_400_BAD_REQUEST)
-"""
 class OpsDetails(APIView):
 
     # mostra dettagli operazione dato nome della batteria e id dell'operazione, volendo basta anche solo l'id

@@ -1,0 +1,62 @@
+
+html, body{
+  background-size: cover;  
+  background-image: url(cool-background.svg);
+  height: 100%
+}
+
+.App {
+  text-align: left;
+  color: rgb(230, 55, 145);
+}
+
+.text-title{
+  text-align: left;
+  color: rgb(230, 55, 145);
+  padding-left: 15px;
+  padding-top: 1px;
+}
+
+.text-normal{
+  color: black;
+  text-align: left;
+  padding-left: 15px;
+}
+
+.button{
+  
+  text-align: left;
+  padding-left: 15px;
+  padding-top: 15px;
+}
+
+.btn{
+  margin-right: 5px;
+}
+
+.text-white{
+  color:white;
+  text-align: right;
+  padding-top: 20px;
+  padding-right: 20px;
+}
+
+.img-logo{
+  width: 15%;
+  height: 15%;
+  display: flex;
+  list-style: none;
+}
+
+nav{
+  min-height: 10vh;
+  background: rgb(157, 176, 211);
+  color: rgb(48, 146, 233);
+}
+
+.list-group-item{
+  background-color: #899235;
+  border-top: 1px solid #0091b5;
+  border-left-color: #fff;
+  border-right-color: #fff;
+}

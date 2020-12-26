@@ -9,6 +9,15 @@ B   ->  2
 C   ->  3
 ...
 """
+# da Wikipedia https://it.wikipedia.org/wiki/Batteria_(aceto_balsamico_tradizionale)#I_legni
+TYPE_WOODS = (('Rovere','Rovere'),
+('Castagno','Castagno'),
+('Frassino','Frassino'),
+('Ginepro','Ginepro'),
+('Ciliegio','Ciliegio'),
+('Pero e melo','Pero e melo'),
+('Robinia','Robinia'),
+('Gelso','Gelso'))
 
 OPERATIONS = ['Rabbocco','Aggiunta mosto', 'Prelievo','Misurazione','Degustazione']
 
@@ -18,12 +27,9 @@ class Set(models.Model):
     def __str__(self):
         return self.name
 
-#TODO: type_wood = models.TextChoices(..vari tipi di legno ..) 
-#TODO: textchoice anche per le operazioni, IMPORTANTE
-
 class Barrel(models.Model):
     pos = models.IntegerField(default=0)
-    type_wood = models.CharField(max_length=20)
+    type_wood = models.CharField(max_length = 40, choices=TYPE_WOODS)
     capacity = models.IntegerField(default=0)
     battery = models.ForeignKey(Set,on_delete=models.CASCADE)
 
@@ -41,26 +47,26 @@ class Operation(models.Model):
     datetime = models.DateTimeField()
     barrel = models.ForeignKey(Barrel, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
-    name = models.CharField(max_length=20, default='Prelievo')
+    name = models.CharField(max_length=20, default=OPERATIONS[2])
 
 class Rabbocco(Operation):
     #barrel = barrel_origin
     barrel_destination = models.ForeignKey(Barrel, on_delete=models.CASCADE)
-    name = 'Rabbocco'
+    name = OPERATIONS[0]
 
     def get_type_operation(self):
         return "Rabbocco"
 
 class AddMosto(Operation):
     type_mosto = models.CharField(max_length=20)
-    name = 'Aggiunta mosto'
+    name = OPERATIONS[1]
 
     def get_type_operation(self):
-        return "Aggiunta mosto o aceto"
+        return "Aggiunta mosto"
 
 class Misuration(Operation):
     type_measure  = models.CharField(max_length=20)
-    name = 'Misurazione'
+    name = OPERATIONS[3]
     
     def get_type_operation(self):
         return "Misurazione"
