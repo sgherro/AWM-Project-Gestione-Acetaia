@@ -1,7 +1,58 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Container, Row, Col, Card, CardTitle, CardText } from 'reactstrap';
-import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
-import {ModBarrel} from './../components/ModBarrel'
+import { Row, Col } from 'reactstrap'
+import { DelBarrel } from '../components/DelBarrel'
+import { ModBarrel } from './../components/ModBarrel'
+import { FormatDate} from './SetDetails'
+
+function GetOpsList(barrelId) {
+
+    const [error, setError] = useState(null);
+    const [operations, setOperations] = useState([]);
+
+
+    useEffect(() => {
+        console.log(barrelId.barrelId)
+        fetch('http://127.0.0.1:8000/api/v1/opslist/' + barrelId.barrelId)
+            .then(res => res.json())
+            .then((result) => {
+                setOperations(result);
+            },
+                (error) => {
+                    setError(error);
+                }
+            )
+        console.log(operations)
+    })
+
+    if (error) {
+        return <div>Error: {error.message}</div>
+    } else {
+        return (
+            <div>
+                <Row>  <h3 className="text-title">Operazioni nel barile</h3>
+                </Row>
+                <Row className="text-title">
+                    <div className="list-group" id="list-tab" role="tablist">
+                        <ul className ="list-unstyled">
+                            {operations.length !== 0 ? operations.map(op => (
+                                <li key={op.id} className="list-group-item">  
+                                    <h5 className="text-title">{op.name}</h5>
+                                    <h5 className="text-normal">Data:    <FormatDate datetime={op.datetime} /></h5>
+                                    <h5 className="text-normal">Quantità: {Math.abs(op.quantity)} litri</h5>
+                                </li>
+                            )) : <h5 className="text-normal">
+                                    Nessuna operazione presente
+                                </h5>
+                            }
+                        </ul>
+                    </div>
+                </Row>
+            </div>
+        )
+    }
+}
+
+
 export function BarrelDetails({ match }) {
 
     const [error, setError] = useState(null);
@@ -12,49 +63,47 @@ export function BarrelDetails({ match }) {
             .then(res => res.json())
             .then((result) => {
                 setItem(result);
-                console.log(result);
-                console.log(item);
-                console.log(setItem(result));
             },
                 (error) => {
                     setError(error);
 
                 }
             )
+    }, [match.params.id,match.params.pos])
 
-    }, [])
     if (error) {
         return <div>Error: {error.message}</div>
     } else {
-        if (item.length != 1) {
+        if (item.length !== 1) {
             return (
                 <div className="text-white">Error: errore nel database più elementi con lo stesso ID</div>
             )
         } else {
             return (
                 <div className="App">
-
                     <Col>
-                        <ul  className="m-3">
+                        <ul className="m-3">
 
                             {item.map(barrel => <li className="list-unstyled" key={barrel.id}>
                                 <Row>
                                     <h3 className="text-title">Dettagli barile</h3>
-                                    <ModBarrel match={match.params} className="text-title"/> 
-                                    <p className="text-title"><button type="button" className="btn btn-light"> Elimina </button> </p>
-
+                                    <ModBarrel match={match.params} className="text-title" />
+                                    <DelBarrel match={match.params} className="text-title" />
                                     <Col>
                                         <h2 className="text-white">Batteria {match.params.id} </h2>
                                     </Col>
                                 </Row>
-
-                                <div className="text-normal">
-                                    <h5>
-                                        <Row className="m-2">Posizione numero {barrel.pos}</Row>
-                                        <Row className="m-2">   Tipo di legno: {barrel.type_wood} </Row>
-                                        <Row className="m-2">  Capacità: {barrel.capacity} L </Row>
-                                    </h5>
+                                <div>
+                                    <h5 class="text-normal"> Posizione {barrel.pos}</h5>
+                                    <h5 class="text-title"> Capacità </h5>
+                                    <h5 className="text-normal">
+                                        {barrel.capacity} litri</h5>
+                                    <h5 class="text-title"> Tipologia di legno </h5>
+                                    <h5 className="text-normal">
+                                        {barrel.type_wood}</h5>
                                 </div>
+
+                                < GetOpsList className="m-3" barrelId={barrel.id} />
                             </li>
                             )}
                         </ul>

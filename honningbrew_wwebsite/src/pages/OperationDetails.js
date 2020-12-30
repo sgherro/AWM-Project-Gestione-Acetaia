@@ -1,32 +1,61 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Container, Row, Col, Card, CardTitle, CardText } from 'reactstrap';
-import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
+import {Row, Col} from 'reactstrap';
 import {FormatDate} from './SetDetails'
+import {DelOps} from './../components/DelOps'
 
 function OpDescription(operation) {
 
     const op = operation.operation
-
-
     // TODO: da mettere a posto posizione del barile
+    const [error, setError] = useState(null);
+    const [barrel, setBarrel] = useState([]);
+    const [barrelDestination, setBarrelDestination] = useState([]);
+   
+    useEffect(() => {
+     
+    fetch('http://127.0.0.1:8000/api/v1/detail/' +  op.barrel)
+    .then(res => res.json())
+    .then((result) => {
+        setBarrel(result);
+    },
+        (error) => {
+            setError(error);
+        }
+    )
+    console.log(op.barrel_destination)
+    if(op.barrel_destination){
+    fetch('http://127.0.0.1:8000/api/v1/detail/' +  op.barrel_destination)
+    .then(res => res.json())
+    .then((result) => {
+        setBarrelDestination(result);
+    },
+        (error) => {
+            setError(error);
+        }
+    )
+    console.log(barrelDestination)
+    }
+})
+
+if(error){
+    return <div>Error: {error.message}</div>
+}else{
     return (
         <div>
-            
-            <h5 className = "text-normal">
-                Barile nella posizione {op.barrel.pos}
-        </h5> 
-        <h5 class="text-title"> Data </h5> 
+                <h5 className="text-normal"> Barile nella posizione {barrel.pos}</h5> 
+                            
+        <h5 className="text-title"> Data </h5> 
             <h5 className = "text-normal">    
             <FormatDate datetime = {op.datetime}/>
         </h5>
-        <h5 class="text-title"> Quantità </h5> 
+        <h5 className="text-title"> Quantità </h5> 
             <h5 className = "text-normal">    
-            {op.quantity} litri
+            {Math.abs(op.quantity)} litri
         </h5>
                 {op.name === "Rabbocco" ?
                 <div>
                    <h5 className="text-title"> Barile di destinazione</h5>
-                    <h5 className="text-normal">{op.barrel_destination}</h5>
+                    <h5 className="text-normal">Barile in posizione     {barrelDestination.pos}</h5>
                 </div> : null}   
                 {op.name === "Misurazione" ?
                 <div>
@@ -44,33 +73,29 @@ function OpDescription(operation) {
                     <h5 className="text-normal">{op.type_mosto}</h5>
                 </div> : null}   
         </div>
-    )
+    )}
 }
 
 export function OperationDetails({ match }) {
 
     const [error, setError] = useState(null);
     const [item, setItem] = useState([]);
-
     useEffect(() => {
         fetch('http://127.0.0.1:8000/api/v1/' + match.params.id + '/ops/' + match.params.pos)
             .then(res => res.json())
             .then((result) => {
                 setItem(result);
-                console.log(result)
-                console.log(item)
             },
                 (error) => {
                     setError(error);
-
                 }
             )
-    }, [])
+    })
 
     if (error) {
         return <div>Error: {error.message}</div>
     } else {
-        if (item.length != 1) {
+        if (item.length !== 1) {
             return (
                 <div className="text-title">
                     ERRORE: errore nel database più elementi con lo stesso ID
@@ -79,20 +104,19 @@ export function OperationDetails({ match }) {
         } else {
             return (
 
-                <div class="App">
-                    <ul class="m-3">
-                        {item.map(op => <li class="list-unstyled">
+                <div className="App">
+                    
+                    <ul className="m-3">
+                        {item.map((op) => <li className="list-unstyled">
 
-                            <Row class="text-title"> <h3>Operazione di {op.name} </h3>
-                                <p class="text-title"><button type="button" class="btn btn-light">Modifica </button> </p>
-                                <p class="text-title"><button type="button" class="btn btn-light">Elimina</button> </p>
+                            <Row className="text-title"> <h3>Operazione di {op.name} </h3>
+                                <DelOps match={match.params} className="text-title" />
                                 <Col>
-                                    <h2 class="text-white">Batteria {match.params.id} </h2>
+                                    <h2 className="text-white">Batteria {match.params.id} </h2>
                                 </Col>
                             </Row>
-                            <div class="text-normal">
-                                <OpDescription operation={op} />
-
+                            <div className="text-normal">
+                            <OpDescription operation={op}/>
                             </div>
                         </li>
                         )}

@@ -17,11 +17,10 @@ export class ModBarrel extends Component {
   }
 
   myChangeHandler = (event) => {
-
     this.setState({ [event.target.name]: event.target.value })
   }
 
-  submitHandler = (event) => {
+  submitHandler = () => {
 
     var body_instance = {}
     if (this.state.typeWood !== "" && this.state.capacity > 0) {
@@ -88,7 +87,6 @@ export class ModBarrel extends Component {
           className="btn btn-light" onClick={() => this.setFlag()} >
           Modifica </button> </div>
         {this.state.flag ? <this.formBody /> : null}
-
       </div>
     );
   }

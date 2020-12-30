@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 // TODO controllare validatori input
+// TODO mettere a posto aggiunta mosto, non aggiunge, non so xk?
 
 export class AddOps extends Component {
 
@@ -11,13 +12,32 @@ export class AddOps extends Component {
             quantity: 0,
             flag: false,
             barrel: 0,
-            barrelDestination: 39,
+            barrelDestination: 0,
             typeMosto: "",
             data: "",
             description: "Nessuna descrizione",
-            typeMeasure: ""
+            typeMeasure: "",
         };
     }
+
+    addQuantity = (barrelId) =>{
+        console.log("barrel " + barrelId)
+            const body_instance = {
+                'datetime': new Date(Date.now()).toISOString(),
+                'quantity': this.state.quantity,
+                'barrel': barrelId
+            }
+              const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body_instance)
+              };
+              fetch('http://127.0.0.1:8000/api/v1/barrel/' , requestOptions)
+              .then((res) => res.json())
+              .then((result) => alert(result))
+              
+            
+        }
 
     setFlag = () => {
         this.flag = this.setState({ flag: !this.state.flag })
@@ -29,15 +49,17 @@ export class AddOps extends Component {
 
     targetChangeHandler = (event) => {
         this.setState({ [event.target.name]: event.target.value })
+        console.log(this.state)
     }
 
     formBarrelList = () => {
 
         const barrelList = this.props.barrelList
         const { barrel } = this.state
-        return (<form>
-            <p className="text-normal">Scegli un barile da associare</p>
-            <p className="text-normal">
+        return (
+        <form>
+            <p>Scegli un barile da associare</p>
+            <p>
                 <select value={barrel} name="barrel" onChange={this.targetChangeHandler}>
                     {barrelList.map((b, key) => {
                         return (<option key={key} value={b.id}>{b.pos}</option>)
@@ -53,10 +75,9 @@ export class AddOps extends Component {
 
         const barrelList = this.props.barrelList
         const { barrelDestination } = this.state
-        const optionList = []
         return (<form>
-            <p className="text-normal">Scegli il barile di destinazione</p>
-            <p className="text-normal">
+            <p>Scegli il barile di destinazione</p>
+            <p>
                 <select value={barrelDestination} name="barrelDestination" onChange={this.targetChangeHandler}>
                     {barrelList.map((b, key) => {
                         return (<option key={key} value={b.id}>{b.pos}</option>)
@@ -68,10 +89,8 @@ export class AddOps extends Component {
         )
     }
 
-    submitHandler = (event) => {
+    submitHandler = () => {
 
-        var set_name = this.props.match.id
-        var number_battery = set_name.toString().charCodeAt(0) - 64
         var body_instance = {}
 
         if (this.state.typeOps !== "") {
@@ -81,26 +100,34 @@ export class AddOps extends Component {
                 'name': this.state.typeOps,
                 'barrel': this.state.barrel
             }
-            if (this.state.typeOps == "Rabbocco" && this.state.barrelDestination!=0) {
+            if (this.state.typeOps === "Rabbocco" )
+            if(this.state.barrelDestination!== 0) {
                 body_instance['barrel_destination'] = this.state.barrelDestination
+                body_instance['quantity'] = (0 - this.state.quantity).toString()
+
             }else{
                 alert("Errore nella scelta del barile di destinazione, per favore riprovare")
             }
-            if (this.state.typeOps == "Misurazione" && this.state.typeMeasure!="") {
+        
+            if (this.state.typeOps === "Misurazione")
+            if(this.state.typeMeasure!=="") {
                 body_instance['type_measure'] = this.state.typeMeasure
             }else{
                 alert("Errore nella descrizione della misurazione, per favore riprovare")
             }
-            if (this.state.typeOps == "Aggiunta mosto" && this.state.typeMosto!="") {
+        
+            if (this.state.typeOps === "Aggiunta mosto")
+            if (this.state.typeMosto!=="") {
                 body_instance['type_mosto'] = this.state.typeMosto
+                body_instance['quantity'] = (0 - this.state.quantity).toString()
+             
             }else{
                 alert("Errore nella descrizione del mosto, per favore riprovare")
             }
-            if (this.state.typeOps == "Degustazione") {
+            if (this.state.typeOps === "Degustazione") {
                 body_instance['description'] = this.state.description
                 body_instance['quantity'] = 0
             }
-
         } else {
             alert("Errore nel body request, riprovare")
         }
@@ -110,10 +137,15 @@ export class AddOps extends Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body_instance)
         };
-
+        alert(requestOptions.body)
         fetch('http://127.0.0.1:8000/api/v1/' + this.props.match.id + '/ops', requestOptions)
             .then(response => response.json())
             .then(data => this.setState({ postId: data.id }));
+        
+        this.addQuantity(body_instance.barrel)
+        if (this.state.barrelDestination !== 0){
+            this.addQuantity(body_instance.barrel_destination)
+        }
 
     }
 
@@ -125,7 +157,7 @@ export class AddOps extends Component {
                     <h6 >Capacità</h6>
                     <input type="number" name="quantity" value={quantity} onChange={this.targetChangeHandler} />
                 </form>
-                <h6 className="text-normal">Barile coinvolto</h6>
+                <h6>Barile coinvolto</h6>
                 <this.formBarrelList />
             </div>
         )
@@ -139,7 +171,7 @@ export class AddOps extends Component {
                     <h6 >Descrizione</h6>
                     <input type="text" name="description" value={description} onChange={this.targetChangeHandler} />
                 </form>
-                <h6 className="text-normal">Barile coinvolto</h6>
+                <h6>Barile coinvolto</h6>
                 <this.formBarrelList />
             </div>
         )
@@ -155,7 +187,7 @@ export class AddOps extends Component {
                     <h6 >Tipo di misurazione</h6>
                     <input type="text" name="typeMeasure" value={typeMeasure} onChange={this.targetChangeHandler} />
                 </form>
-                <h6 className="text-normal">Barile coinvolto</h6>
+                <h6>Barile coinvolto</h6>
                 <this.formBarrelList />
             </div>
         )
@@ -171,23 +203,23 @@ export class AddOps extends Component {
                     <h6 >Tipo di mosto</h6>
                     <input type="text" name="typeMosto" value={typeMosto} onChange={this.targetChangeHandler} />
                 </form>
-                <h6 className="text-normal">Barile coinvolto</h6>
+                <h6>Barile coinvolto</h6>
                 <this.formBarrelList />
             </div>
         )
     }
 
     formRabbocco = () => {
-        const { quantity, barrelDestination } = this.state
+        const { quantity} = this.state
         return (
             <div className="text-normal">
                 <form>
                     <h6 >Capacità</h6>
                     <input type="number" name="quantity" value={quantity} onChange={this.targetChangeHandler} />
                 </form>
-                <h6 className="text-normal">Barile coinvolto</h6>
+                <h6> Barile coinvolto</h6>
                 <this.formBarrelList />
-                <h6 className="text-normal">Barile destinazione</h6>
+                <h6> Barile destinazione</h6>
                 <this.formBarrelDestList />
             </div>
         )

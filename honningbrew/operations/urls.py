@@ -13,6 +13,9 @@ api/v1/                         Root dir (list of sets)
 
 urlpatterns = [
     # / root 
+    path('opslist/<int:barrel_id>', views.OperationsByBarrel.as_view()),
+    path('detail/<int:barrel_id>/', views.BarrelDetailsById.as_view()),
+    path('barrel/', views.BarrelModification.as_view()),
     path('<str:set_name>/ops/<int:ops_id>', views.OpsDetails.as_view()),
     path('<str:set_name>/ops', views.OpsList.as_view()),
     path('<str:set_name>/<int:barrel_pos>/', views.BarrelDetails.as_view()),

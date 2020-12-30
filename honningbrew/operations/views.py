@@ -22,11 +22,36 @@ OPERATIONS_MODELS_SWITCH = {
     "Prelievo" : Operation
 }
 
+class BarrelDetailsById(APIView):
+
+    # dettagli di un barile dato l'id
+    def get(self, request, barrel_id, format=None):
+            queryset = Barrel.objects.get(id=barrel_id)
+            ser = serializers.BarrelSerializer(queryset)
+            return Response(ser.data)
+
+# dato l'id del barile in questione si toglie un valore specificato nella request
+# per aggiungere si deve inviare una request con un valore negativo
+# metodo post usato per modificare il quantitativo di aceto dentro ad un barile dopo un operazione
+class BarrelModification(APIView):
+
+    def post(self, request, format=None):
+        ser = serializers.OperationSerializer(data=request.data)
+        if ser.is_valid():
+            queryset = Barrel.objects.get(id=request.data['barrel'] )
+            capacity_instance = queryset.capacity
+            if int(request.data['quantity']) < capacity_instance:
+                queryset.capacity = capacity_instance - int(request.data['quantity'])
+                queryset.save()
+
+            return Response(queryset.capacity)
+        return Response(ser.data)
+
 # visualizza la lista delle batterie
 class SetList(APIView):
     
     def get(self,request,format=None):
-        queryset = Set.objects.all()
+        queryset = Set.objects.all().order_by('name')
         ser = serializers.SetSerializer(queryset, many=True)
         return Response(ser.data)
 
@@ -59,7 +84,7 @@ class BarrelDetails(APIView):
     # dettagli di un barile dentro ad una batteria, data dalla posizione del barile 
     # nella batteria e dal nome della batteria
     def get(self, request, barrel_pos, set_name, format=None):
-            queryset = Barrel.objects.filter(battery__name=set_name).filter(pos=barrel_pos)
+            queryset = Barrel.objects.filter(battery__name=set_name).filter(pos=barrel_pos).order_by('pos')
             ser = serializers.BarrelSerializer(queryset, many=True)
             return Response(ser.data)
 
@@ -85,12 +110,20 @@ class BarrelDetails(APIView):
         ret = Barrel.objects.filter(battery__name=set_name, pos=barrel_pos).delete()
         return Response(ret, status=status.HTTP_204_NO_CONTENT)
 
+
+class OperationsByBarrel(APIView):
+    
+    def get(self, request, barrel_id, format=None):
+        queryset = Operation.objects.filter(barrel__id=barrel_id).order_by('datetime')
+        ser = serializers.OperationSerializer(queryset, many=True)
+        return Response(ser.data)
+
 class OpsList(APIView):
 
     # lista di operazioni per nome della batteria
     def get(self, request, set_name, format = None):
         try:
-            queryset = Operation.objects.filter(barrel__battery__name=set_name)
+            queryset = Operation.objects.filter(barrel__battery__name=set_name).order_by('datetime')
             ser = serializers.OperationSerializer(queryset, many=True)
     
             return Response(ser.data)

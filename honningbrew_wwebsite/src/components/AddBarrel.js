@@ -17,7 +17,7 @@ export class AddBarrel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      typeWood: "",
+      typeWood: "Rovere",
       capacity: 0,
       flag: false,
     };
@@ -37,7 +37,7 @@ export class AddBarrel extends Component {
     var set_name = this.props.match.id
     var number_battery = set_name.toString().charCodeAt(0) - 64
     var body_instance = {}
-    if (this.state.typeWood !== "" && this.state.capacity > 0) {
+    if (this.state.typeWood !== "" && this.state.capacity >= 0) {
       body_instance = {
         'type_wood': this.state.typeWood,
         'capacity': this.state.capacity,
@@ -50,7 +50,7 @@ export class AddBarrel extends Component {
           'battery': number_battery
         }
       }
-      if (this.state.capacity > 0) {
+      if (this.state.capacity >= 0) {
         body_instance = {
           'capacity': this.state.capacity,
           'battery': number_battery
@@ -62,7 +62,7 @@ export class AddBarrel extends Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body_instance)
     };
-    fetch('http://127.0.0.1:8000/api/v1/' + this.props.match.id + '/', requestOptions)
+    fetch('http://127.0.0.1:8000/api/v1/' + this.props.match.id + '/' , requestOptions)
       .then(response => response.json())
       .then(data => this.setState({ postId: data.id }));
 

@@ -1,7 +1,6 @@
-import React, { Container } from 'react'
-import { Navbar, Nav,NavDropdown, Form, FormControl, Button } from 'react-bootstrap'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { Row, Col } from 'reactstrap'
+import { Col } from 'reactstrap'
 
 export const Navigationbar = () => {
 
@@ -10,7 +9,7 @@ export const Navigationbar = () => {
   return (
 <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
   <div className="container-fluid">
-  <a href="https://www.consorziobalsamico.it"><img src= {urlImg} width= "130px" height="80px"/></a>
+  <a href="https://www.consorziobalsamico.it"><img alt="" src= {urlImg} width= "130px" height="80px"/></a>
   <Col><Link to='/' className="navbar-brand"> <h3>Acetaia Tenuta Honningbrew </h3></Link></Col>
   
      <ul className="navbar-nav me-auto mb-2 mb-lg-0">

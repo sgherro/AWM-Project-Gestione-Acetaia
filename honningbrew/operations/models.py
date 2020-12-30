@@ -46,7 +46,7 @@ class Barrel(models.Model):
 class Operation(models.Model):
     datetime = models.DateTimeField()
     barrel = models.ForeignKey(Barrel, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=0)
+    quantity = models.IntegerField(default=0)
     name = models.CharField(max_length=20, default=OPERATIONS[2])
 
 class Rabbocco(Operation):

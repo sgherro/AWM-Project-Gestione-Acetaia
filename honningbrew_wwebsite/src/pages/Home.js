@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Container, Row, Col, Card, CardTitle, CardText } from 'reactstrap';
-import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
+import { Row, Col } from 'reactstrap';
+import {Link} from 'react-router-dom'
 
 // TODO fare i pulsanti
 // TODO implemenatare altre funzioni?
