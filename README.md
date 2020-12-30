@@ -3,6 +3,21 @@
 Quick setup:
 https://github.com/sgherro/Progetto-AWM---Gestione-Acetaia.git
 
+
+## Information
+
+### The comments and the variables name are in Italian. 
+This is a University project for the course of web application and mobile. \
+It's a web application with Back-end and Front-end parts, build with Django framework (for the API back-end) 
+and React (for front-end).
+
+<pre>
+./honningbrew contains the API Back-End
+./honningbrew_wwebsite contains the Front-End website (typo in the name :-))
+</pre>
+
+## Learn more
+
 ### Create a new repository on the command line
 <pre> echo "# Progetto-AWM---Gestione-Acetaia" >> README.md
  git init
