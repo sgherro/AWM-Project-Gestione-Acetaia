@@ -22,41 +22,15 @@ OPERATIONS_MODELS_SWITCH = {
     "Prelievo" : Operation
 }
 
-class BarrelDetailsById(APIView):
 
-    # dettagli di un barile dato l'id
-    def get(self, request, barrel_id, format=None):
-            queryset = Barrel.objects.get(id=barrel_id)
-            ser = serializers.BarrelSerializer(queryset)
-            return Response(ser.data)
-
-# dato l'id del barile in questione si toglie un valore specificato nella request
-# per aggiungere si deve inviare una request con un valore negativo
-# metodo post usato per modificare il quantitativo di aceto dentro ad un barile dopo un operazione
-class BarrelModification(APIView):
-
-    def post(self, request, format=None):
-        ser = serializers.OperationSerializer(data=request.data)
-        if ser.is_valid():
-            queryset = Barrel.objects.get(id=request.data['barrel'] )
-            capacity_instance = queryset.capacity
-            if int(request.data['quantity']) < capacity_instance:
-                queryset.capacity = capacity_instance - int(request.data['quantity'])
-                queryset.save()
-
-            return Response(queryset.capacity)
-        return Response(ser.data)
-
-# visualizza la lista delle batterie
 class SetList(APIView):
     
+    # visualizza la lista delle batterie
     def get(self,request,format=None):
         queryset = Set.objects.all().order_by('name')
         ser = serializers.SetSerializer(queryset, many=True)
         return Response(ser.data)
 
-
-#dettagli di una batteria
 class SetDetails(APIView):
 
     # visualizzazione di lista di barili dentro la stessa batteria    
@@ -110,9 +84,33 @@ class BarrelDetails(APIView):
         ret = Barrel.objects.filter(battery__name=set_name, pos=barrel_pos).delete()
         return Response(ret, status=status.HTTP_204_NO_CONTENT)
 
+class BarrelDetailsById(APIView):
+
+    # dettagli di un barile dato l'id
+    def get(self, request, barrel_id, format=None):
+            queryset = Barrel.objects.get(id=barrel_id)
+            ser = serializers.BarrelSerializer(queryset)
+            return Response(ser.data)
+
+class BarrelModification(APIView):
+    
+    # dato l'id del barile in questione si toglie un valore specificato nella request
+    # per aggiungere si deve inviare una request con un valore negativo
+    # metodo post usato per modificare il quantitativo di aceto dentro ad un barile dopo un operazione
+    def post(self, request, format=None):
+        ser = serializers.OperationSerializer(data=request.data)
+        if ser.is_valid():
+            queryset = Barrel.objects.get(id=request.data['barrel'] )
+            capacity_instance = queryset.capacity
+            if int(request.data['quantity']) <= capacity_instance:
+                queryset.capacity = capacity_instance - int(request.data['quantity'])
+                queryset.save()
+            return Response(queryset.capacity)
+        return Response(ser.data)
 
 class OperationsByBarrel(APIView):
     
+    # lista di operazioni date dall'id del barile coinvolto
     def get(self, request, barrel_id, format=None):
         queryset = Operation.objects.filter(barrel__id=barrel_id).order_by('datetime')
         ser = serializers.OperationSerializer(queryset, many=True)
@@ -135,13 +133,16 @@ class OpsList(APIView):
     # nome per differenziare il tipo di operazione, il prelievo è quella base.
     # si differenzia il tipo di serializzatore in base al nome inserito, che per evitare 
     # problemi dovrebbe essere un TextChoice
-   
     def post(self, request, set_name, format=None):
         type_ops = request.data['name']
         ser = OPERATIONS_SERIALIZERS_SWITCH[type_ops](data=request.data)
         if ser.is_valid():  
-            ser.save()
-            return Response(ser.data, status = status.HTTP_201_CREATED)
+            operation_instance = Barrel.objects.get(id=request.data['barrel'])
+            capacity_instance = operation_instance.capacity
+            if(capacity_instance >= int(request.data['quantity'])):
+                if(ser.is_valid()):
+                    ser.save()
+                return Response(ser.data, status = status.HTTP_201_CREATED)
         return Response(ser.errors, status = status.HTTP_400_BAD_REQUEST) 
    
 
@@ -191,4 +192,3 @@ class OpsDetails(APIView):
     def delete(self, request, set_name, ops_id, format=None):
         ret = Operation.objects.get(pk=ops_id).delete()
         return Response(ret, status=status.HTTP_204_NO_CONTENT)
-#TODO: implementare le altre views 

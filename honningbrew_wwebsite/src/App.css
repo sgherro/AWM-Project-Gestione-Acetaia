@@ -5,9 +5,21 @@ html,body{
   height: 100%
 }
 
+html, body, #app, #app>div{
+  height: 100%;
+}
+
+.full-height{
+  height: 120%
+}
+
+.root{
+  height: 100%;
+}
 .App {
   text-align: left;
   color: rgb(230, 55, 145);
+  height: 100%  ;
 }
 
 .text-title{
@@ -21,6 +33,10 @@ html,body{
   color: black;
   text-align: left;
   padding-left: 15px;
+}
+
+.carousel-inner img {
+  margin: auto;
 }
 
 .button{

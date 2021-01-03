@@ -20,7 +20,7 @@ class App extends Component {
   render() {
     return (
       
-      <BrowserRouter>
+      <BrowserRouter className="App">
         <div className = "App">
           <Navigationbar />
         

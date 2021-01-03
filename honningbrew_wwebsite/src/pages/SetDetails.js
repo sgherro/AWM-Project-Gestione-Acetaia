@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col} from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import { AddBarrel } from './../components/AddBarrel'
 import { AddOps } from '../components/AddOps'
@@ -9,7 +9,7 @@ export function FormatDate(datetime) {
     const newDate = new Date(datetime.datetime).toLocaleDateString()
     const newHour = new Date(datetime.datetime).getHours()
     return (
-       <> {newDate}, ore {newHour} </>
+        <> {newDate}, ore {newHour} </>
     )
 }
 
@@ -19,8 +19,8 @@ export function SetDetails({ match }) {
     const [items, setItems] = useState([]);
     const [operations, setOperations] = useState([]);
     const [filterYear, setFilterYear] = useState("Z")
-    const listYear = ["2021", "2020", "2019","2018","2017","2016","2015","2014","2013","2012","2010"]
-    
+    const listYear = ["2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2010"]
+
     useEffect(() => {
 
         fetch('http://127.0.0.1:8000/api/v1/' + match.params.id)
@@ -61,10 +61,10 @@ export function SetDetails({ match }) {
                             <AddBarrel match={match.params} className="text-title" />
                         </Row>
 
-                        <Row className="text-normal"> 
+                        <Row className="text-normal">
                             <div className="list-group" id="list-tab" role="tablist">
                                 <ul className="list-unstyled">
-                                    {items.length!==0 ? items.map(item => (
+                                    {items.length !== 0 ? items.map(item => (
 
                                         <li key={item.id}>
                                             <Link className="list-group-item list-group-item-action"
@@ -75,7 +75,7 @@ export function SetDetails({ match }) {
                                             </Link>
                                         </li>
                                     )) : <h5 className="text-normal">
-                                    Nessun barile presente
+                                            Nessun barile presente
                                 </h5>
                                     }
                                 </ul>
@@ -87,19 +87,20 @@ export function SetDetails({ match }) {
                         <Row className="text-title">  <h3>Operazioni nella batteria </h3>
                             <AddOps match={match.params} barrelList={items} className="text-title" />
                             <div>
-            <DropdownButton id="dropdown-basic-button" title="Filtro per anno" >
-                {listYear.length !== 0 ? listYear.map(year => {
-                    return (<Dropdown.Item key={year} name="filterYear" onClick={ () => {selectYear(year)}}>
-                        {year}
-                    </Dropdown.Item>)}
-                ) : <>Nessuna data disponibile</>}
-            </DropdownButton>
-        </div>
+                                <DropdownButton id="dropdown-basic-button" title="Filtro per anno" >
+                                    {listYear.length !== 0 ? listYear.map(year => {
+                                        return (<Dropdown.Item key={year} name="filterYear" onClick={() => { selectYear(year) }}>
+                                            {year}
+                                        </Dropdown.Item>)
+                                    }
+                                    ) : <>Nessuna data disponibile</>}
+                                </DropdownButton>
+                            </div>
                         </Row>
                         <Row className="text-normal">
                             <div className="list-group" id="list-tab" role="tablist">
                                 <ul className="list-unstyled">
-                                    {operations.length!==0 ? operations.filter(oper => oper.datetime.includes(filterYear)).map(op => (
+                                    {operations.length !== 0 ? operations.filter(oper => oper.datetime.includes(filterYear)).map(op => (
                                         <li key={op.id}>
                                             <Link className="list-group-item list-group-item-action"
                                                 to={'/' + match.params.id + '/ops/' + op.id}>
@@ -108,8 +109,8 @@ export function SetDetails({ match }) {
                                             </Link>
                                         </li>
                                     ))
-                                    : <h5 className="text-normal">
-                                    Nessuna operazione presente
+                                        : <h5 className="text-normal">
+                                            Nessuna operazione presente
                                 </h5>}
                                 </ul>
                             </div>

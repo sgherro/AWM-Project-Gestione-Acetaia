@@ -22,11 +22,16 @@ export class AddOps extends Component {
 
     addQuantity = (barrelId) =>{
         console.log("barrel " + barrelId)
-            const body_instance = {
-                'datetime': new Date(Date.now()).toISOString(),
-                'quantity': this.state.quantity,
-                'barrel': barrelId
-            }
+        console.log(this.state.quantity)
+        const body_instance = {
+            'datetime': new Date(Date.now()).toISOString(),
+            'quantity': this.state.quantity,
+            'barrel': barrelId
+        }
+        if(this.state.typeOps==="Aggiunta mosto" || this.state.barrelDestination!==0){
+            if(barrelId===this.state.barrelDestination)
+                body_instance['quantity'] = (0 - this.state.quantity).toString()
+        }
               const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -35,8 +40,6 @@ export class AddOps extends Component {
               fetch('http://127.0.0.1:8000/api/v1/barrel/' , requestOptions)
               .then((res) => res.json())
               .then((result) => alert(result))
-              
-            
         }
 
     setFlag = () => {
@@ -92,7 +95,6 @@ export class AddOps extends Component {
     submitHandler = () => {
 
         var body_instance = {}
-
         if (this.state.typeOps !== "") {
             body_instance = {
                 'datetime': new Date(Date.now()).toISOString(),
@@ -120,7 +122,6 @@ export class AddOps extends Component {
             if (this.state.typeMosto!=="") {
                 body_instance['type_mosto'] = this.state.typeMosto
                 body_instance['quantity'] = (0 - this.state.quantity).toString()
-             
             }else{
                 alert("Errore nella descrizione del mosto, per favore riprovare")
             }
@@ -137,6 +138,7 @@ export class AddOps extends Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body_instance)
         };
+        //TODO da eliminare
         alert(requestOptions.body)
         fetch('http://127.0.0.1:8000/api/v1/' + this.props.match.id + '/ops', requestOptions)
             .then(response => response.json())
@@ -259,7 +261,6 @@ export class AddOps extends Component {
             </div>
         )
     }
-
     render() {
 
         return (

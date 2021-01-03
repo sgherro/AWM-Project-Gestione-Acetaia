@@ -6,7 +6,6 @@ import {DelOps} from './../components/DelOps'
 function OpDescription(operation) {
 
     const op = operation.operation
-    // TODO: da mettere a posto posizione del barile
     const [error, setError] = useState(null);
     const [barrel, setBarrel] = useState([]);
     const [barrelDestination, setBarrelDestination] = useState([]);
@@ -35,7 +34,7 @@ function OpDescription(operation) {
     )
     console.log(barrelDestination)
     }
-})
+},[op.barrel, op.barrel_destination])
 
 if(error){
     return <div>Error: {error.message}</div>
@@ -90,7 +89,7 @@ export function OperationDetails({ match }) {
                     setError(error);
                 }
             )
-    })
+    },[match.params.id, match.params.id])
 
     if (error) {
         return <div>Error: {error.message}</div>
@@ -105,9 +104,8 @@ export function OperationDetails({ match }) {
             return (
 
                 <div className="App">
-                    
                     <ul className="m-3">
-                        {item.map((op) => <li className="list-unstyled">
+                        {item.map((op) => <li key={op.id} className="list-unstyled">
 
                             <Row className="text-title"> <h3>Operazione di {op.name} </h3>
                                 <DelOps match={match.params} className="text-title" />

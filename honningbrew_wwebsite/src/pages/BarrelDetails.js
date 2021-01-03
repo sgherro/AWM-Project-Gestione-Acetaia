@@ -22,7 +22,7 @@ function GetOpsList(barrelId) {
                 }
             )
         console.log(operations)
-    })
+    },[barrelId.barrelId])
 
     if (error) {
         return <div>Error: {error.message}</div>
@@ -69,7 +69,7 @@ export function BarrelDetails({ match }) {
 
                 }
             )
-    }, [match.params.id,match.params.pos])
+    }, [match.params.id, match.params.pos])
 
     if (error) {
         return <div>Error: {error.message}</div>
