@@ -12,8 +12,6 @@ import versare from './../images/versare.png'
 import luogo from './../images/luogo.png'
 import { Carousel } from 'react-bootstrap'
 
-// TODO fare i pulsanti
-// TODO implemenatare altre funzioni?
 
 export function Home() {
 
@@ -40,11 +38,6 @@ export function Home() {
         return (
 
             <div className="m-3">
-                <div className="text-title">
-                    <button type="button" className="btn btn-light">Aggiungi batteria</button>
-                    <button type="button" className="btn btn-light"> Degustazioni</button>
-                    <button type="button" className="btn btn-light"> Elimina batteria</button>
-                </div>
 
                 <div className="text-title">
                     <Col>
@@ -103,7 +96,7 @@ export function Home() {
                         </div>
                         <Carousel.Caption>
                             <h3>La nostra acetaia</h3>
-                            <p>"Vola bas e schiv i sas" cit. Nonna Lola"</p>
+                            <p>"Vola bas e schiv i sas" cit. Nonna Lola</p>
                         </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item interval={5000}>

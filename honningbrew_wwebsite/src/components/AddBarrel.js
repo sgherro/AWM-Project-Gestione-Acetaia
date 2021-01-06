@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 
-// TODO controllare validatori
-
 export const TYPE_WOODS = [
   { value: 'Rovere', label: 'Rovere' },
   { value: 'Castagno', label: 'Castagno' },

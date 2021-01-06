@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 
-// TODO controllare validatori input
-// TODO mettere a posto aggiunta mosto, non aggiunge, non so xk?
 
 export class AddOps extends Component {
 
@@ -39,7 +37,7 @@ export class AddOps extends Component {
               };
               fetch('http://127.0.0.1:8000/api/v1/barrel/' , requestOptions)
               .then((res) => res.json())
-              .then((result) => alert(result))
+              .then((result) => console.log(result))
         }
 
     setFlag = () => {
@@ -64,6 +62,7 @@ export class AddOps extends Component {
             <p>Scegli un barile da associare</p>
             <p>
                 <select value={barrel} name="barrel" onChange={this.targetChangeHandler}>
+                    <option> - </option>
                     {barrelList.map((b, key) => {
                         return (<option key={key} value={b.id}>{b.pos}</option>)
                     }
@@ -82,6 +81,7 @@ export class AddOps extends Component {
             <p>Scegli il barile di destinazione</p>
             <p>
                 <select value={barrelDestination} name="barrelDestination" onChange={this.targetChangeHandler}>
+                <option> - </option>
                     {barrelList.map((b, key) => {
                         return (<option key={key} value={b.id}>{b.pos}</option>)
                     }
@@ -138,8 +138,7 @@ export class AddOps extends Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body_instance)
         };
-        //TODO da eliminare
-        alert(requestOptions.body)
+        console.log(requestOptions.body)
         fetch('http://127.0.0.1:8000/api/v1/' + this.props.match.id + '/ops', requestOptions)
             .then(response => response.json())
             .then(data => this.setState({ postId: data.id }));
