@@ -32,6 +32,7 @@ class Barrel(models.Model):
     type_wood = models.CharField(max_length = 40, choices=TYPE_WOODS)
     capacity = models.IntegerField(default=0)
     battery = models.ForeignKey(Set,on_delete=models.CASCADE)
+    acidity = models.FloatField(default=1.0)
 
 """
 # operazione base è il prelievo, perchè non ha altri campi in più rispetto 

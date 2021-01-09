@@ -18,6 +18,7 @@ export class AddBarrel extends Component {
       typeWood: "Rovere",
       capacity: 0,
       flag: false,
+      acidity: 1.0  ,
     };
   }
 
@@ -35,23 +36,26 @@ export class AddBarrel extends Component {
     var set_name = this.props.match.id
     var number_battery = set_name.toString().charCodeAt(0) - 64
     var body_instance = {}
-    if (this.state.typeWood !== "" && this.state.capacity >= 0) {
+    if (this.state.typeWood !== "" && this.state.capacity >= 0 && this.state.acidity >= 1.0) {
       body_instance = {
         'type_wood': this.state.typeWood,
         'capacity': this.state.capacity,
-        'battery': number_battery
+        'battery': number_battery,
+        'acidity' : this.state.acidity,
       }
     } else {
       if (this.state.typeWood !== "") {
         body_instance = {
           'type_wood': this.state.typeWood,
-          'battery': number_battery
+          'battery': number_battery,
+          'acidity' : this.state.acidity,
         }
       }
       if (this.state.capacity >= 0) {
         body_instance = {
           'capacity': this.state.capacity,
-          'battery': number_battery
+          'battery': number_battery,
+        'acidity' : this.state.acidity,
         }
       }
     }
@@ -67,13 +71,14 @@ export class AddBarrel extends Component {
   }
 
   formBody = () => {
-    const { typeWood, capacity } = this.state
+    const { typeWood, capacity, acidity } = this.state
     return (
       <div class="card">
         <div class="card-body">
           <form onSubmit={this.submitHandler}>
             <h6>Tipo di legno</h6>
             <select name="typeWood" value={typeWood} onChange={this.myChangeHandler}>
+              <option> - </option>
               {TYPE_WOODS.map((tw, key) => {
                 return (<option key={key} value={tw.value}>{tw.label}</option>)
               })}
@@ -81,6 +86,8 @@ export class AddBarrel extends Component {
             </select>
             <h6>Capacità</h6>
             <input type="number" name="capacity" value={capacity} onChange={this.myChangeHandler} />
+            <h6>Acidità</h6>
+            <input type="number" name="acidity" step = "any" value={acidity} onChange={this.myChangeHandler} />
             <p className="button"><button class="btn btn-light" type="submit">Aggiungi barile</button></p>
           </form>
         </div>

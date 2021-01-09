@@ -66,11 +66,13 @@ class BarrelDetails(APIView):
     # tipo di legno
     def post(self, request, barrel_pos, set_name, format=None):
             try:
-                bar_instance = Barrel.objects.filter(battery__name=set_name, pos=barrel_pos)
+                bar_instance = Barrel.objects.filter(battery__name = set_name, pos = barrel_pos)
                 if('capacity' in request.data):
                     bar_instance.update(capacity = request.data['capacity'])
-                if('type_wood' in request.data): 
+                if('type_wood' in request.data):
                     bar_instance.update(type_wood = request.data['type_wood'])
+                if('acidity' in request.data):
+                    bar_instance.update(acidity = request.data['acidity'])
 
                 ser = serializers.BarrelSerializer(bar_instance, many=True)    
                 return Response(ser.data)

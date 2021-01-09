@@ -101,6 +101,9 @@ export function BarrelDetails({ match }) {
                                     <h5 class="text-title"> Tipologia di legno </h5>
                                     <h5 className="text-normal">
                                         {barrel.type_wood}</h5>
+                                        <h5 class="text-title"> Acidità </h5>
+                                    <h5 className="text-normal">
+                                        {barrel.acidity}</h5>
                                 </div>
 
                                 < GetOpsList className="m-3" barrelId={barrel.id} />
