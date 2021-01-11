@@ -24,7 +24,7 @@ export class ModBarrel extends Component {
   submitHandler = () => {
 
     var body_instance = {}
-    if (this.state.typeWood !== "" && this.state.capacity > 0 && this.state.acidity >= 1.0) {
+    if (this.state.typeWood !== "" && this.state.capacity > 0 && this.state.acidity > 1.0) {
       body_instance = {
         'type_wood': this.state.typeWood,
         'capacity': this.state.capacity,
@@ -38,7 +38,6 @@ export class ModBarrel extends Component {
           'type_wood': this.state.typeWood,
           'battery': this.props.match.id,
           'pos': this.props.match.pos,
-          'acidity' : this.state.acidity,
         }
       }
       if (this.state.capacity > 0) {
@@ -46,7 +45,6 @@ export class ModBarrel extends Component {
           'capacity': this.state.capacity,
           'battery': this.props.match.id,
           'pos': this.props.match.pos,
-          'acidity' : this.state.acidity,
         }
       }
     }
@@ -76,9 +74,9 @@ export class ModBarrel extends Component {
               })}
             </select>
             <h6>Capacità</h6>
-            <input type="text" name="capacity" value={capacity} onChange={this.myChangeHandler} />
+            <input type="text" name="capacity" min="0" value={capacity} onChange={this.myChangeHandler} />
             <h6>Acidità</h6>
-            <input type="number" name="acidity" value={acidity} onChange={this.myChangeHandler} />
+            <input type="number" name="acidity" max="10.0" min="1.0" value={acidity} onChange={this.myChangeHandler} />
             <p className="button"><button class="btn btn-light" type="submit">Inserisci modifiche</button></p>
           </form>
         </div>

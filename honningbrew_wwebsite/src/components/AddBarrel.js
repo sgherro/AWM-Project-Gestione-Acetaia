@@ -36,7 +36,7 @@ export class AddBarrel extends Component {
     var set_name = this.props.match.id
     var number_battery = set_name.toString().charCodeAt(0) - 64
     var body_instance = {}
-    if (this.state.typeWood !== "" && this.state.capacity >= 0 && this.state.acidity >= 1.0) {
+    if (this.state.typeWood !== "" && this.state.capacity > 0 && this.state.acidity > 1.0) {
       body_instance = {
         'type_wood': this.state.typeWood,
         'capacity': this.state.capacity,
@@ -48,14 +48,12 @@ export class AddBarrel extends Component {
         body_instance = {
           'type_wood': this.state.typeWood,
           'battery': number_battery,
-          'acidity' : this.state.acidity,
         }
       }
       if (this.state.capacity >= 0) {
         body_instance = {
           'capacity': this.state.capacity,
           'battery': number_battery,
-        'acidity' : this.state.acidity,
         }
       }
     }
@@ -85,9 +83,9 @@ export class AddBarrel extends Component {
 
             </select>
             <h6>Capacità</h6>
-            <input type="number" name="capacity" value={capacity} onChange={this.myChangeHandler} />
+            <input type="number" name="capacity" min="0" value={capacity} onChange={this.myChangeHandler} />
             <h6>Acidità</h6>
-            <input type="number" name="acidity" step = "any" value={acidity} onChange={this.myChangeHandler} />
+            <input type="number" name="acidity" step = "any" min="1.0"max="10.0" value={acidity} onChange={this.myChangeHandler} />
             <p className="button"><button class="btn btn-light" type="submit">Aggiungi barile</button></p>
           </form>
         </div>
