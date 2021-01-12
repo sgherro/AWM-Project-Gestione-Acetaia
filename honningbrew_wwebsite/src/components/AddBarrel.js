@@ -56,6 +56,13 @@ export class AddBarrel extends Component {
           'battery': number_battery,
         }
       }
+      if (this.state.acidity > 1.0) {
+        body_instance = {
+          'acidity': this.state.acidity,
+          'battery': this.props.match.id,
+          'pos': this.props.match.pos,
+        }
+      }
     }
     const requestOptions = {
       method: 'POST',

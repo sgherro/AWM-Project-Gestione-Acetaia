@@ -19,7 +19,7 @@ export function SetDetails({ match }) {
     const [items, setItems] = useState([]);
     const [operations, setOperations] = useState([]);
     const [filterYear, setFilterYear] = useState("Z")
-    const listYear = ["2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2010"]
+    const listYear = ["Tutti","2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2010"]
 
     useEffect(() => {
 
@@ -45,7 +45,11 @@ export function SetDetails({ match }) {
     }, [match.params.id])
 
     const selectYear = (year) => {
+        if(year==="Tutti"){
+            setFilterYear("Z")
+        }else{
         setFilterYear(year)
+        }
         console.log(filterYear)
     }
 
