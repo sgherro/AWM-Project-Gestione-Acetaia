@@ -27,7 +27,7 @@ export class AddOps extends Component {
             'barrel': barrelId
         }
         if(this.state.typeOps==="Aggiunta mosto" || this.state.barrelDestination!==0){
-            if(barrelId===this.state.barrelDestination)
+            if(barrelId===this.state.barrelDestination || this.state.typeOps==="Aggiunta mosto")
                 body_instance['quantity'] = (0 - this.state.quantity).toString()
         }
               const requestOptions = {
